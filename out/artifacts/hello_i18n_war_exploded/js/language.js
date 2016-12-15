@@ -2,6 +2,7 @@
  * cookie操作
  */
 var getCookie = function(name, value, options) {
+
     if (typeof value != 'undefined') { // name and value given, set cookie
         options = options || {};
         if (value === null) {
@@ -24,7 +25,7 @@ var getCookie = function(name, value, options) {
         var s = [cookie, expires, path, domain, secure].join('');
         var secure = options.secure ? '; secure' : '';
         var c = [name, '=', encodeURIComponent(value)].join('');
-        var cookie = [c, expires, path, domain, secure].join('')
+        var cookie = [c, expires, path, domain, secure].join('');
         document.cookie = cookie;
     } else { // only name given, get cookie
         var cookieValue = null;
@@ -77,7 +78,7 @@ var execI18n = function(){
     if (optionEle.length < 1) {
         console.log("未找到页面名称元素，请在页面写入\n <meta id=\"i18n_pagename\" content=\"页面名(对应语言包的语言文件名)\">");
         return false;
-    };
+    }
     var sourceName = optionEle.attr('content');
     sourceName = sourceName.split('-');
     /*
@@ -88,24 +89,42 @@ var execI18n = function(){
     } else {
         // 获取浏览器语言
         var navLanguage = getNavLanguage();
+
+        var contain = false;
         if (navLanguage) {
             // 判断是否在网站支持语言数组里
-            var charSize = $.inArray(navLanguage, webLanguage);
-            if (charSize > -1) {
+            for(var i=0;i<webLanguage.length;i++){
+                if(navLanguage == webLanguage[i]){
+                    contain = true;
+                    break;
+                }
+                if(webLanguage[i].indexOf(navLanguage) > -1){
+                    navLanguage = webLanguage[i];
+                    contain = true;
+                    break;
+                }
+            }
+            if(contain){
                 i18nLanguage = navLanguage;
-                // 存到缓存中
-                getCookie("userLanguage",navLanguage);
-            };
+                getCookie("userLanguage",i18nLanguage);
+            }
+
+            // var charSize = $.inArray(navLanguage, webLanguage);
+            // if (charSize > -1) {
+            //     i18nLanguage = navLanguage;
+            //     // 存到缓存中
+            //     getCookie("userLanguage",navLanguage);
+            // }
         } else{
-            console.log("not navigator");
             return false;
         }
     }
+
+
     /* 需要引入 i18n 文件*/
     if ($.i18n == undefined) {
-        console.log("请引入i18n js 文件")
         return false;
-    };
+    }
 
     /*
      这里需要进行i18n的翻译
@@ -145,8 +164,7 @@ $(function(){
 
     /* 选择语言 */
     $("#language").on('change', function() {
-        var language = $(this).children('option:selected').val()
-        console.log(language);
+        var language = $(this).children('option:selected').val();
         getCookie("userLanguage",language,{
             expires: 30,
             path:'/'
