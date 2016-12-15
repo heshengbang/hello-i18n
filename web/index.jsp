@@ -23,6 +23,7 @@
             <option value="zh-CN">中文简体</option>
             <option value="zh-TW">中文繁體</option>
             <option value="en">English</option>
+            <option value="jp">日本語</option>
         </select>
     </div>
 </div>
