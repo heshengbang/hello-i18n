@@ -63,7 +63,6 @@
         if (settings.language === null) {
             settings.language = '';
         }
-        console.log("settings - "+settings.language);
         // load and parse bundle files
         var files = getFiles(settings.name);
         for (var i = 0; i < files.length; i++) {
